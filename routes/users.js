@@ -44,15 +44,13 @@ router.post("/register", [
             jwt.sign(
                 jwtPayload,
                 config.get("jwtSecret"),
-                {
-                    expiresIn: 3600
-                },
+                { expiresIn: 3600 },
                 (err, token) => {
-                    console.error(err);
+                    if (err) throw err;
                     return res.json({ token: token });
                 });
         } catch (error) {
-            console.log(error);
+            console.error(error);
             return res.status(500).json({ msg: "Something went wrong on our end." });
         }
 
