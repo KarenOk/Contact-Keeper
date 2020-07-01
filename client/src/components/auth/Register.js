@@ -24,22 +24,22 @@ function Register() {
             <form onSubmit={onSubmit}>
                 <div className="form-group">
                     <label htmlFor="name"> Full name </label>
-                    <input type="text" name="name" id="name" onChange={onChange} />
+                    <input type="text" name="name" id="name" value={name} onChange={onChange} required />
                 </div>
 
                 <div className="form-group">
                     <label htmlFor="email"> Email </label>
-                    <input type="email" name="email" id="email" onChange={onChange} />
+                    <input type="email" name="email" id="email" value={email} onChange={onChange} required />
                 </div>
 
                 <div className="form-group">
                     <label htmlFor="password">Password</label>
-                    <input type="password" name="password" id="password" onChange={onChange} />
+                    <input type="password" name="password" id="password" value={password} onChange={onChange} required />
                 </div>
 
                 <div className="form-group">
                     <label htmlFor="cpassword"> Confirm Password</label>
-                    <input type="password" name="cpassword" id="cpassword" onChange={onChange} />
+                    <input type="password" name="cpassword" id="cpassword" value={cpassword} onChange={onChange} required />
                 </div>
 
                 <input type="submit" value="Register" className="btn btn-primary btn-block" />
