@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 import Navbar from "./components/layout/Navbar";
 import Alerts from "./components/layout/Alerts";
@@ -6,9 +6,19 @@ import Home from "./components/pages/Home";
 import About from "./components/pages/About";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
+import { useAuthContext } from "./context/auth/authContext";
+import setAuthToken from './utils/setAuthToken';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
+setAuthToken(localStorage.token);
+
 const App = () => {
+  const { loadUser } = useAuthContext();
+
+  useEffect(() => {
+    loadUser();
+    // eslint-disable-next-line
+  }, []);
   return (
     <Router>
       <React.Fragment>
