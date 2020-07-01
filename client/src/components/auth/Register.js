@@ -1,6 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useAuthContext } from "../../context/auth/authContext";
+import { useAlertContext } from "../../context/alert/alertContext";
 
 function Register() {
+    const { register, error, clearError } = useAuthContext();
+    const { setAlert } = useAlertContext();
+
     const [form, setForm] = useState({
         name: "",
         email: "",
@@ -8,13 +13,19 @@ function Register() {
         cpassword: ""
     });
 
+    useEffect(() => {
+        if (error) setAlert(error, "danger");
+        clearError();
+    }, [error]);
+
     const { name, email, password, cpassword } = form;
 
     const onChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
     const onSubmit = e => {
         e.preventDefault();
-        console.log("Registered");
+        if (cpassword !== password) setAlert("Passwords dont match", "danger");
+        else register({ name, email, password });
     };
 
     return (
@@ -34,12 +45,12 @@ function Register() {
 
                 <div className="form-group">
                     <label htmlFor="password">Password</label>
-                    <input type="password" name="password" id="password" value={password} onChange={onChange} required />
+                    <input type="password" name="password" id="password" value={password} onChange={onChange} required minLength="6" />
                 </div>
 
                 <div className="form-group">
                     <label htmlFor="cpassword"> Confirm Password</label>
-                    <input type="password" name="cpassword" id="cpassword" value={cpassword} onChange={onChange} required />
+                    <input type="password" name="cpassword" id="cpassword" value={cpassword} onChange={onChange} required minLength="6" />
                 </div>
 
                 <input type="submit" value="Register" className="btn btn-primary btn-block" />
