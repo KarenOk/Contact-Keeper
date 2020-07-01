@@ -78,6 +78,10 @@ img {
   color: var(--dark-color);
 }
 
+.text-danger {
+  color: var(--danger-color);
+}
+
 .text-center {
   text-align: center;
 }

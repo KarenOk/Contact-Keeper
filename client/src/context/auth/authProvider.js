@@ -77,10 +77,12 @@ const AuthProvider = (props) => {
             dispatch({ type: LOGIN_FAIL, payload: err.response.data.msg });
         }
     };
-    // Get User
 
     // Clear error
     const clearError = () => dispatch({ type: CLEAR_ERROR });
+
+    // Logout
+    const logout = () => dispatch({ type: LOGOUT });
 
     return (
         <AuthContext.Provider value={{
@@ -91,6 +93,7 @@ const AuthProvider = (props) => {
             user: state.user,
             register,
             login,
+            logout,
             clearError,
             loadUser
         }}>
