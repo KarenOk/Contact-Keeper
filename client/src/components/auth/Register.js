@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useAuthContext } from "../../context/auth/authContext";
 import { useAlertContext } from "../../context/alert/alertContext";
 
-function Register() {
-    const { register, error, clearError } = useAuthContext();
+const Register = props => {
+    const { register, error, clearError, isAuthenticated } = useAuthContext();
     const { setAlert } = useAlertContext();
 
     const [form, setForm] = useState({
@@ -14,9 +14,16 @@ function Register() {
     });
 
     useEffect(() => {
-        if (error) setAlert(error, "danger");
-        clearError();
-    }, [error]);
+        if (isAuthenticated) {
+            setAlert("Registered Successfully", "success", 7000);
+            props.history.push("/");
+        };
+        if (error) {
+            setAlert(error, "danger");
+            clearError();
+        }
+        // eslint-disable-next-line
+    }, [error, isAuthenticated]);
 
     const { name, email, password, cpassword } = form;
 
@@ -57,6 +64,6 @@ function Register() {
             </form>
         </div>
     );
-}
+};
 
 export default Register;
