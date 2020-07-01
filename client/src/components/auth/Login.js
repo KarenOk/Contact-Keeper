@@ -1,13 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAlertContext } from "../../context/alert/alertContext";
+import { useAuthContext } from "../../context/auth/authContext";
 
-function Login() {
+const Login = props => {
     const { setAlert } = useAlertContext();
+    const { login, error, isAuthenticated, clearError } = useAuthContext();
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            setAlert("Login successful", "success", 7000);
+            props.history.push("/");
+        }
+        if (error) {
+            setAlert(error, 'danger');
+            clearError();
+        }
+
+        // eslint-disable-next-line
+    }, [error, isAuthenticated]);
+
     const [form, setForm] = useState({
         email: "",
         password: ""
     });
-
     const { email, password } = form;
 
     const onChange = e => setForm({ ...form, [e.target.name]: e.target.value });
@@ -15,9 +30,7 @@ function Login() {
     const onSubmit = e => {
         e.preventDefault();
         if (!email || !password) setAlert("All fields are required", "danger");
-        else setAlert("Login successful", "success");;
-
-        console.log("Logged in");
+        else login({ email, password });
     };
 
     return (
@@ -39,6 +52,6 @@ function Login() {
             </form>
         </div>
     );
-}
+};
 
 export default Login;
