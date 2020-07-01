@@ -8,9 +8,11 @@ import {
     LOGIN_FAIL,
     LOGIN_SUCCESS,
     LOGOUT,
+    USER_LOADED,
     AUTH_ERROR,
     CLEAR_ERROR
 } from "./authTypes";
+import setAuthToken from "../../utils/setAuthToken";
 
 const CONFIG = {
     'Content-Type': 'application/json'
@@ -27,6 +29,22 @@ const AuthProvider = (props) => {
 
     const [state, dispatch] = useReducer(AuthReducer, initialState);
 
+    // Load User
+    const loadUser = async () => {
+        setAuthToken(localStorage.token);
+
+        try {
+            const res = await Axios.get('/api/auth');
+
+            dispatch({
+                type: USER_LOADED,
+                payload: res.data
+            });
+        } catch (err) {
+            dispatch({ type: AUTH_ERROR });
+        }
+    };
+
     // Register User
     const register = async data => {
         try {
@@ -36,11 +54,9 @@ const AuthProvider = (props) => {
                 type: REGISTER_SUCCESS,
                 payload: res.data
             });
+
+            loadUser();
         } catch (err) {
-            console.log(err);
-            console.log(err.response);
-            console.log(err.response.status);
-            console.log(err.response.data.msg);
             dispatch({
                 type: REGISTER_FAIL,
                 payload: err.response.data.msg
@@ -49,7 +65,18 @@ const AuthProvider = (props) => {
     };
 
     // Login User
-
+    const login = async data => {
+        try {
+            const res = await Axios.post('/api/auth', data, CONFIG);
+            dispatch({
+                type: LOGIN_SUCCESS,
+                payload: res.data
+            });
+            loadUser();
+        } catch (err) {
+            dispatch({ type: LOGIN_FAIL, payload: err.response.data.msg });
+        }
+    };
     // Get User
 
     // Clear error
@@ -63,7 +90,9 @@ const AuthProvider = (props) => {
             error: state.error,
             user: state.user,
             register,
-            clearError
+            login,
+            clearError,
+            loadUser
         }}>
             {props.children}
         </AuthContext.Provider>
