@@ -1,5 +1,5 @@
 import React, { useReducer } from "react";
-import uuid from "uuid";
+import Axios from "axios";
 import ContactContext from "./contactContext";
 import ContactReducer from "./contactReducer";
 import {
@@ -9,39 +9,38 @@ import {
     SET_CURRENT,
     CLEAR_CURRENT,
     FILTER_CONTACTS,
-    CLEAR_FILTER
+    CLEAR_FILTER,
+    CONTACTS_ERROR
 } from "./contactTypes";
+
+const CONFIG = {
+    headers: {
+        'Content-Type': "application/json"
+    }
+};
 
 function ContactProvider(props) {
     const initialState = {
-        contacts: [{
-            id: 1,
-            name: "Karen Okonkwo",
-            email: "karenokonkwo29@gmail.com",
-            phone: "+2348131033508",
-            type: "personal",
-        }, {
-            id: 2,
-            name: "Chuka Okonkwo",
-            email: "chukaokonkwo29@gmail.com",
-            phone: "+2348131033508",
-            type: "professional",
-        }, {
-            id: 3,
-            name: "Neme Okonkwo",
-            email: "nemeokonkwo29@gmail.com",
-            phone: "+2348131033508",
-            type: "landline",
-        }],
+        contacts: [],
         current: null,
         filtered: null
     };
 
     const [state, dispatch] = useReducer(ContactReducer, initialState);
 
-    const addContact = contact => {
-        contact.id = uuid.v4();
-        dispatch({ type: ADD_CONTACT, payload: contact });
+    const addContact = async contact => {
+        try {
+            const res = await Axios.post('/api/contacts', contact, CONFIG);
+            dispatch({
+                type: ADD_CONTACT,
+                payload: res.data
+            });
+        } catch (err) {
+            dispatch({
+                type: CONTACTS_ERROR,
+                payload: err.response.data.msg
+            });
+        }
     };
 
     const updateContact = contact => {

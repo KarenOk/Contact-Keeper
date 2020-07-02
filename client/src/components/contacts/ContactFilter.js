@@ -6,8 +6,9 @@ function ContactFilter() {
     const { contacts, filtered, clearFilter, filterContacts } = useContactContext();
 
     useEffect(() => {
-        if (!filtered) ref.current.value = '';
-    }, [filtered]);
+        // console.log(ref, filtered);
+        // if (!filtered) ref.current.value = '';
+    }, [filtered, ref]);
 
     const onChange = e => {
         if (ref.current.value === '') clearFilter();
