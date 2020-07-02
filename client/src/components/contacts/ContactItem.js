@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useContactContext } from "../../context/contact/contactContext";
 
 function ContactItem({ contact }) {
-    const { id, name, email, phone, type } = contact;
+    const { _id, name, email, phone, type } = contact;
     const { deleteContact, setCurrent, clearCurrent } = useContactContext();
     const badgeMap = {
         personal: "badge-primary",
@@ -12,7 +12,7 @@ function ContactItem({ contact }) {
     };
 
     const onDelete = () => {
-        deleteContact(id);
+        deleteContact(_id);
         clearCurrent();
     };
     return (
