@@ -1,11 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { useContactContext } from "../../context/contact/contactContext";
 import ContactItem from "./ContactItem";
+import Spinner from "../layout/Spinner";
+
 function Contacts() {
-    const { contacts, filtered } = useContactContext();
+    const { contacts, filtered, getContacts, loading } = useContactContext();
+
+    useEffect(() => {
+        getContacts();
+        // eslint-disable-next-line
+    }, []);
+
+    if (loading) return <Spinner />;
 
     if (!contacts.length) return <h3 className="text-dark"> Please add contacts. </h3>;
+
     return (
         <div>
             <TransitionGroup>
