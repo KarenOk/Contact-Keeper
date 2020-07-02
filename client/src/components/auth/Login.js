@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useAlertContext } from "../../context/alert/alertContext";
 import { useAuthContext } from "../../context/auth/authContext";
+import spinner from "../../components/layout/spinner.gif";
 
 const Login = props => {
     const { setAlert } = useAlertContext();
-    const { login, error, isAuthenticated, clearError } = useAuthContext();
+    const { login, loading, error, isAuthenticated, clearError } = useAuthContext();
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -48,7 +49,10 @@ const Login = props => {
                     <input type="password" name="password" id="password" value={password} onChange={onChange} />
                 </div>
 
-                <input type="submit" value="Login" className="btn btn-primary btn-block" />
+                <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
+                    {loading ? <img src={spinner} style={{ width: "25px" }} alt="Loading..." /> : "Login"}
+                </button>
+
             </form>
         </div>
     );

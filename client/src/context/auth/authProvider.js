@@ -10,7 +10,8 @@ import {
     LOGOUT,
     USER_LOADED,
     AUTH_ERROR,
-    CLEAR_ERROR
+    CLEAR_ERROR,
+    LOADING_TRUE
 } from "./authTypes";
 import setAuthToken from "../../utils/setAuthToken";
 
@@ -31,6 +32,7 @@ const AuthProvider = (props) => {
 
     // Load User
     const loadUser = async () => {
+        dispatch({ type: LOADING_TRUE });
         setAuthToken(localStorage.token);
 
         try {
@@ -47,6 +49,7 @@ const AuthProvider = (props) => {
 
     // Register User
     const register = async data => {
+        dispatch({ type: LOADING_TRUE });
         try {
             const res = await Axios.post('/api/users/register', data, CONFIG);
 
@@ -66,6 +69,7 @@ const AuthProvider = (props) => {
 
     // Login User
     const login = async data => {
+        dispatch({ type: LOADING_TRUE });
         try {
             const res = await Axios.post('/api/auth', data, CONFIG);
             dispatch({

@@ -6,8 +6,8 @@ import {
     LOGOUT,
     USER_LOADED,
     AUTH_ERROR,
-    CLEAR_ERROR
-
+    CLEAR_ERROR,
+    LOADING_TRUE
 } from "./authTypes";
 
 export default (state, action) => {
@@ -46,6 +46,11 @@ export default (state, action) => {
             return {
                 ...state,
                 error: null
+            };
+        case LOADING_TRUE:
+            return {
+                ...state,
+                loading: true
             };
         default:
             return state;

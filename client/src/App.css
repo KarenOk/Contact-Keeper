@@ -213,6 +213,11 @@ img {
   outline: none;
 }
 
+.btn:disabled {
+  cursor: auto;
+  opacity: 0.5;
+}
+
 .btn-link {
   background: none;
   padding: 0;
@@ -299,6 +304,10 @@ img {
 
 .btn:hover {
   opacity: 0.8;
+}
+
+.btn:disabled:hover {
+  opacity: 0.5;
 }
 
 .bg-light,
