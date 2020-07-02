@@ -28,12 +28,15 @@ function ContactForm() {
         e.preventDefault();
         if (current) updateContact(contact);
         else addContact(contact);
+
         setContact({
             name: '',
             phone: '',
             email: '',
             type: 'personal'
         });
+
+        clearAll();
     };
 
     const clearAll = () => {
@@ -47,7 +50,7 @@ function ContactForm() {
             </h3>
             <label>
                 Name
-                <input type="text" name="name" value={name} placeholder="Jane Doe" onChange={onChange} />
+                <input type="text" name="name" value={name} placeholder="Jane Doe" onChange={onChange} required />
             </label>
 
             <label>
@@ -83,7 +86,7 @@ function ContactForm() {
                 />
             </div>
             {current && <div>
-                <button className="btn btn-light btn-block" onClick={clearAll}> CLEAR ALL </button>
+                <button className="btn btn-light btn-block" type="button" onClick={clearAll}> CLEAR ALL </button>
             </div>}
         </form>
     );
