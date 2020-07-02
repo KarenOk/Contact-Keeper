@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useAuthContext } from "../../context/auth/authContext";
 import { useAlertContext } from "../../context/alert/alertContext";
+import spinner from "../../components/layout/spinner.gif";
 
 const Register = props => {
-    const { register, error, clearError, isAuthenticated } = useAuthContext();
+    const { register, error, clearError, isAuthenticated, loading } = useAuthContext();
     const { setAlert } = useAlertContext();
 
     const [form, setForm] = useState({
@@ -60,7 +61,9 @@ const Register = props => {
                     <input type="password" name="cpassword" id="cpassword" value={cpassword} onChange={onChange} required minLength="6" />
                 </div>
 
-                <input type="submit" value="Register" className="btn btn-primary btn-block" />
+                <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
+                    {loading ? <img src={spinner} style={{ width: "25px" }} alt="Loading..." /> : "Login"}
+                </button>
             </form>
         </div>
     );
