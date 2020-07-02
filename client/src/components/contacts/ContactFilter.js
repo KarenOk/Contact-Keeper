@@ -1,18 +1,13 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { useContactContext } from "../../context/contact/contactContext";
 
 function ContactFilter() {
     const ref = useRef('');
-    const { contacts, filtered, clearFilter, filterContacts } = useContactContext();
-
-    useEffect(() => {
-        // console.log(ref, filtered);
-        // if (!filtered) ref.current.value = '';
-    }, [filtered, ref]);
+    const { contacts, clearFilter, filterContacts } = useContactContext();
 
     const onChange = e => {
         if (ref.current.value === '') clearFilter();
-        else filterContacts(ref.current.value);
+        else filterContacts(e.target.value);
     };
 
     if (!contacts.length) return <div className="m-3" />;
