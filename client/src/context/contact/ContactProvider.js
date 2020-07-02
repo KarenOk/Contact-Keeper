@@ -10,7 +10,10 @@ import {
     CLEAR_CURRENT,
     FILTER_CONTACTS,
     CLEAR_FILTER,
-    CONTACTS_ERROR
+    CONTACTS_ERROR,
+    LOADING_TRUE,
+    GET_CONTACTS,
+    CLEAR_CONTACTS
 } from "./contactTypes";
 
 const CONFIG = {
@@ -23,12 +26,32 @@ function ContactProvider(props) {
     const initialState = {
         contacts: [],
         current: null,
-        filtered: null
+        filtered: null,
+        loading: false,
+        error: null
     };
 
     const [state, dispatch] = useReducer(ContactReducer, initialState);
 
+    const getContacts = async () => {
+        dispatch({ type: LOADING_TRUE });
+        try {
+            const res = await Axios.get("/api/contacts");
+
+            dispatch({
+                type: GET_CONTACTS,
+                payload: res.data
+            });
+        } catch (err) {
+            dispatch({
+                type: CONTACTS_ERROR,
+                payload: err.response.data.msg
+            });
+        }
+    };
+
     const addContact = async contact => {
+        dispatch({ type: LOADING_TRUE });
         try {
             const res = await Axios.post('/api/contacts', contact, CONFIG);
             dispatch({
@@ -43,13 +66,41 @@ function ContactProvider(props) {
         }
     };
 
-    const updateContact = contact => {
-        dispatch({ type: UPDATE_CONTACT, payload: contact });
+    const updateContact = async contact => {
+        dispatch({ type: LOADING_TRUE });
+        try {
+            const res = await Axios.put(`/api/contacts/${contact._id}`, contact, CONFIG);
+            dispatch({
+                type: UPDATE_CONTACT,
+                payload: res.data
+            });
+        } catch (err) {
+            dispatch({
+                type: CONTACTS_ERROR,
+                payload: err.response.data.msg
+            });
+        }
     };
 
 
-    const deleteContact = id => {
-        dispatch({ type: DELETE_CONTACT, payload: id });
+    const deleteContact = async id => {
+        try {
+            await Axios.delete(`/api/contacts/${id}`);
+
+            dispatch({
+                type: DELETE_CONTACT,
+                payload: id
+            });
+        } catch (err) {
+            dispatch({
+                type: CONTACTS_ERROR,
+                payload: err.response.data.msg
+            });
+        }
+    };
+
+    const clearContacts = () => {
+        dispatch({ type: CLEAR_CONTACTS });
     };
 
     const setCurrent = contact => {
@@ -71,11 +122,14 @@ function ContactProvider(props) {
     return (
         <ContactContext.Provider value={{
             contacts: state.contacts,
+            loading: state.loading,
             current: state.current,
             filtered: state.filtered,
+            getContacts,
             addContact,
             updateContact,
             deleteContact,
+            clearContacts,
             setCurrent,
             clearCurrent,
             filterContacts,
