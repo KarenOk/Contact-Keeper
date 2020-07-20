@@ -10,6 +10,8 @@ connectToDB();
 // Initialize middle ware to accept json response
 app.use(express.json({ extended: false }));
 
+app.get("/", (req, res) => res.send("Welcome to the Contact Keeper API"));
+
 // Define Routes
 app.use("/api/users", require("./routes/users"));
 app.use("/api/auth", require("./routes/auth"));
